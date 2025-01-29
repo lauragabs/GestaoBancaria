@@ -17,5 +17,4 @@ public class Cartao {
     private float limite;
     private String tipo;
     private int cvv; 
-
 }
