@@ -45,4 +45,22 @@ public class ClienteRepository {
                             );
     }
 
+    public Cliente buscarClientePorCpf(String cpf) {
+        String sql = "SELECT * FROM Cliente WHERE cpf = ?";
+        return conexaoBanco.queryForObject(sql, new Object[]{cpf}, (res, rowNum) -> 
+            new Cliente (
+                res.getInt("id"),
+                res.getString("login"),
+                res.getString("cpf"),
+                res.getString("nome"),
+                res.getString("telefone"),
+                res.getString("endereco"),
+                res.getString("email"),
+                res.getString("senha"),
+                res.getString("sexo"),
+                res.getDate("dataNascimento").toLocalDate()
+            )
+        );
+    }
+
 }
