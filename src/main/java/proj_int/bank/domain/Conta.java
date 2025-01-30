@@ -16,4 +16,9 @@ public class Conta {
     private Cliente cliente;
     private LocalDate dataCriacao;
 
+
+    public Conta(Integer id) {
+        this.id = id;
+    }
+    
 }
