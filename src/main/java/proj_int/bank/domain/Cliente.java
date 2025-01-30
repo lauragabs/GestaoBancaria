@@ -21,4 +21,8 @@ public class Cliente {
     private String sexo;
     private LocalDate dataNascimento;
 
+    public Cliente(Integer id) {
+        this.id = id;
+    }
+
 }
