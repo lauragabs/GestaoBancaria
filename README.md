@@ -1,7 +1,7 @@
 # Gestão Bancária
 
 ## Descrição
-Este projeto é um sistema de gestão bancária desenvolvido como parte do Projeto Integrador do curso de [Nome do Curso] no IFTM. O objetivo é fornecer uma plataforma para gerenciar contas bancárias, transações e clientes.
+Este projeto é um sistema de gestão bancária desenvolvido como parte do Projeto Integrador do curso de Sistema para Internet no IFTM. O objetivo é fornecer uma plataforma para gerenciar contas bancárias, transações e clientes.
 
 ## Funcionalidades
 - Criação e gerenciamento de contas bancárias
