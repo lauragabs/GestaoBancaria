@@ -162,6 +162,8 @@ async function listarClientes() {
 
 // Carregar a lista de clientes quando a página for carregada
 document.addEventListener("DOMContentLoaded", listarClientes);
+
+const apiRelatorioURL = "http://10.10.22.14:8080/relatorios/clientes"; 
 async function carregarRelatorios() {
     try {
         let response = await fetch(apiRelatorioURL);
