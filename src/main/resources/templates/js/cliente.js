@@ -1,3 +1,4 @@
+window.addEventListener("DOMContentLoaded", function() {
 const apiURL = "http://10.10.22.14:8080/clientes";
 
 document.getElementById("formCliente")?.addEventListener("submit", async function(event) {
@@ -126,3 +127,40 @@ async function excluirCliente(id) {
         alert("Erro ao excluir o cliente.");
     }
 }
+
+
+async function listarClientes() {
+    try {
+        let response = await fetch(apiURL);
+        let clientes = await response.json();
+
+        let tabela = document.getElementById("tabelaClientes");
+        tabela.innerHTML = ""; 
+
+        if (clientes.length === 0) {
+            tabela.innerHTML = `<tr><td colspan="5" class="text-center py-4">Nenhum cliente encontrado.</td></tr>`;
+            return;
+        }
+
+        clientes.forEach(cliente => {
+            let linha = `
+                <tr class="border-b">
+                    <td class="py-2 px-4 border">${cliente.id}</td>
+                    <td class="py-2 px-4 border">${cliente.nome}</td>
+                    <td class="py-2 px-4 border">${cliente.email}</td>
+                    <td class="py-2 px-4 border">${cliente.telefone}</td>
+                    <td class="py-2 px-4 border">
+                        <button onclick="abrirModalEditar(${cliente.id}, '${cliente.nome}', '${cliente.email}', '${cliente.telefone}')" class="bg-yellow-500 text-white px-2 py-1 rounded">Editar</button>
+                        <button onclick="excluirCliente(${cliente.id})" class="bg-red-600 text-white px-2 py-1 rounded ml-2">Excluir</button>
+                    </td>
+                </tr>
+            `;
+            tabela.innerHTML += linha;
+        });
+
+    } catch (error) {
+        console.error("Erro ao buscar clientes:", error);
+        document.getElementById("tabelaClientes").innerHTML = `<tr><td colspan="5" class="text-center py-4 text-red-600">Erro ao carregar clientes.</td></tr>`;
+    }
+}
+});
