@@ -1,66 +1,66 @@
 package proj_int.bank.repository;
 
+import proj_int.bank.domain.Cliente;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
-import proj_int.bank.domain.Cliente;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.List;
 
 @Repository
 public class ClienteRepository {
 
-    private JdbcTemplate conexaoBanco;
+    private final JdbcTemplate jdbcTemplate;
 
-    public ClienteRepository(JdbcTemplate conexaoBanco) {
-        this.conexaoBanco = conexaoBanco;
+    public ClienteRepository(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
     }
 
-    public void deletarClientePorId(Integer id) {
-        String sql = "DELETE FROM Cliente WHERE id = ?";
-        conexaoBanco.update(sql, id);
+    public void salvar(Cliente cliente) {
+        String sql = "INSERT INTO cliente (nome, sexo, cpf, endereco, email, telefone, data_nascimento, login, senha) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        jdbcTemplate.update(sql, cliente.getNome(), cliente.getSexo(), cliente.getCpf(), cliente.getEndereco(),
+                cliente.getEmail(), cliente.getTelefone(), cliente.getDataNascimento(), cliente.getLogin(), cliente.getSenha());
     }
 
-    public void inserirCliente(Cliente cliente) {
-        String sql = "INSERT INTO Cliente (login, cpf, nome, telefone, endereco, email, senha, sexo, dataNascimento) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        conexaoBanco.update(sql, cliente.getLogin(), 
-                                cliente.getCpf(), 
-                                cliente.getNome(), 
-                                cliente.getTelefone(), 
-                                cliente.getEndereco(), 
-                                cliente.getEmail(), 
-                                cliente.getSenha(), 
-                                cliente.getSexo(), 
-                                cliente.getDataNascimento()
-                            );
+    public List<Cliente> listar() {
+        String sql = "SELECT * FROM cliente";
+        return jdbcTemplate.query(sql, new ClienteRowMapper());
     }
 
-    public void atualizarCliente(Cliente cliente) {
-        String sql = "UPDATE Cliente SET login = ?, telefone = ?, endereco = ?, email = ?, senha = ?, sexo = ?  WHERE id = ?";
-        conexaoBanco.update(sql, cliente.getLogin(), 
-                                cliente.getTelefone(), 
-                                cliente.getEndereco(), 
-                                cliente.getEmail(), 
-                                cliente.getSenha(), 
-                                cliente.getSexo(), 
-                                cliente.getId()
-                            );
+    @SuppressWarnings("deprecation")
+    public Cliente buscarPorId(int id) {
+        String sql = "SELECT * FROM cliente WHERE id = ?";
+        return jdbcTemplate.queryForObject(sql, new Object[]{id}, new ClienteRowMapper());
     }
 
-    public Cliente buscarClientePorCpf(String cpf) {
-        String sql = "SELECT * FROM Cliente WHERE cpf = ?";
-        return conexaoBanco.queryForObject(sql, new Object[]{cpf}, (res, rowNum) -> 
-            new Cliente (
-                res.getInt("id"),
-                res.getString("login"),
-                res.getString("cpf"),
-                res.getString("nome"),
-                res.getString("telefone"),
-                res.getString("endereco"),
-                res.getString("email"),
-                res.getString("senha"),
-                res.getString("sexo"),
-                res.getDate("dataNascimento").toLocalDate()
-            )
-        );
+    public void atualizar(Cliente cliente) {
+        String sql = "UPDATE cliente SET nome = ?, sexo = ?, cpf = ?, endereco = ?, email = ?, telefone = ?, data_nascimento = ?, login = ?, senha = ? WHERE id = ?";
+        jdbcTemplate.update(sql, cliente.getNome(), cliente.getSexo(), cliente.getCpf(), cliente.getEndereco(),
+                cliente.getEmail(), cliente.getTelefone(), cliente.getDataNascimento(), cliente.getLogin(), cliente.getSenha(), cliente.getId());
     }
 
+    public void excluir(int id) {
+        String sql = "DELETE FROM cliente WHERE id = ?";
+        jdbcTemplate.update(sql, id);
+    }
+
+    private static class ClienteRowMapper implements RowMapper<Cliente> {
+        @Override
+        public Cliente mapRow(ResultSet rs, int rowNum) throws SQLException {
+            return new Cliente(
+                    rs.getInt("id"),
+                    rs.getString("nome"),
+                    rs.getString("sexo"),
+                    rs.getString("cpf"),
+                    rs.getString("endereco"),
+                    rs.getString("email"),
+                    rs.getString("telefone"),
+                    rs.getDate("data_nascimento"),
+                    rs.getString("login"),
+                    rs.getString("senha")
+            );
+        }
+    }
 }
