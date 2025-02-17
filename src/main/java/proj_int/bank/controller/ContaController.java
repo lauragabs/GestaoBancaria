@@ -1,6 +1,8 @@
 package proj_int.bank.controller;
 
 import proj_int.bank.domain.Conta;
+import proj_int.bank.repository.AgenciaRepository;
+import proj_int.bank.repository.ClienteRepository;
 import proj_int.bank.repository.ContaRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,13 +15,21 @@ import java.util.List;
 public class ContaController {
 
     private final ContaRepository contaRepository;
+    private final ClienteRepository clienteRepository;
+    private final AgenciaRepository agenciaRepository;
 
-    public ContaController(ContaRepository contaRepository) {
+    public ContaController(
+            ContaRepository contaRepository,
+            ClienteRepository clienteRepository,
+            AgenciaRepository agenciaRepository) {
         this.contaRepository = contaRepository;
+        this.clienteRepository = clienteRepository;
+        this.agenciaRepository = agenciaRepository;
     }
 
     @PostMapping
     public ResponseEntity<String> criar(@RequestBody Conta conta) {
+        clienteRepository.buscarPorId(0);
         contaRepository.salvar(conta);
         return new ResponseEntity<>("Conta criada com sucesso!", HttpStatus.CREATED);
     }

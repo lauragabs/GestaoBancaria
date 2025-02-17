@@ -21,7 +21,11 @@ public class ClienteRepository {
     public void salvar(Cliente cliente) {
         String sql = "INSERT INTO Cliente (nome_cliente, sexo_cliente, cpf_cliente, endereco_cliente, email_cliente, telefone_cliente, dataNasc_cliente, login_cliente, senha_cliente) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         jdbcTemplate.update(sql, cliente.getNome(), cliente.getSexo(), cliente.getCpf(), cliente.getEndereco(),
-                cliente.getEmail(), cliente.getTelefone(), cliente.getDataNascimento(), cliente.getLogin(), cliente.getSenha());
+                cliente.getEmail(),
+                cliente.getTelefone(),
+                cliente.getDataNascimento(),
+                cliente.getLogin(),
+                cliente.getSenha());
     }
 
     public List<Cliente> listar() {
@@ -32,13 +36,14 @@ public class ClienteRepository {
     @SuppressWarnings("deprecation")
     public Cliente buscarPorId(int id) {
         String sql = "SELECT * FROM Cliente WHERE id_cliente = ?";
-        return jdbcTemplate.queryForObject(sql, new Object[]{id}, new ClienteRowMapper());
+        return jdbcTemplate.queryForObject(sql, new Object[] { id }, new ClienteRowMapper());
     }
 
     public void atualizar(Cliente cliente) {
         String sql = "UPDATE Cliente SET nome_cliente = ?, sexo_cliente = ?, cpf_cliente = ?, endereco_cliente = ?, email_cliente = ?, telefone_cliente = ?, dataNasc_cliente = ?, login_cliente = ?, senha_cliente = ? WHERE id_cliente = ?";
         jdbcTemplate.update(sql, cliente.getNome(), cliente.getSexo(), cliente.getCpf(), cliente.getEndereco(),
-                cliente.getEmail(), cliente.getTelefone(), cliente.getDataNascimento(), cliente.getLogin(), cliente.getSenha(), cliente.getId());
+                cliente.getEmail(), cliente.getTelefone(), cliente.getDataNascimento(), cliente.getLogin(),
+                cliente.getSenha(), cliente.getId());
     }
 
     public void excluir(int id) {
@@ -59,8 +64,8 @@ public class ClienteRepository {
                     rs.getString("telefone_cliente"),
                     rs.getDate("dataNasc_cliente"),
                     rs.getString("login_cliente"),
-                    rs.getString("senha_cliente")
-            );
+                    rs.getString("senha_cliente"));
         }
     }
+
 }

@@ -5,7 +5,7 @@ public class Agencia {
     private String nome;
     private String endereco;
     private String telefone;
-
+    public Agencia(){}
     public Agencia(int id, String nome, String endereco, String telefone) {
         this.id = id;
         this.nome = nome;
