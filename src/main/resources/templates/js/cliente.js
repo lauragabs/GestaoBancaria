@@ -41,7 +41,6 @@ async function buscarCliente() {
 
     try {
         let response = await fetch(apiURL);
-        console.log(response);
         let clientes = await response.json();
 
         let clienteEncontrado = clientes.find(cliente => cliente.cpf == idBusca);
@@ -51,13 +50,10 @@ async function buscarCliente() {
                 <div class="bg-white p-4 border rounded mt-4">
                     <p><strong>ID:</strong> ${clienteEncontrado.id}</p>
                     <p><strong>Nome:</strong> ${clienteEncontrado.nome}</p>
-                    <p><strong>Sexo:</strong> ${clienteEncontrado.sexo}</p>
-                    <p><strong>CPF:</strong> ${clienteEncontrado.cpf}</p>
-                    <p><strong>Endereço:</strong> ${clienteEncontrado.endereco}</p>
                     <p><strong>Email:</strong> ${clienteEncontrado.email}</p>
                     <p><strong>Telefone:</strong> ${clienteEncontrado.telefone}</p>
-                    <p><strong>Data de Nascimento:</strong> ${clienteEncontrado.dataNascimento}</p>
-                    <p><strong>Login:</strong> ${clienteEncontrado.login}</p>
+                    <button onclick="abrirModalEditar(${clienteEncontrado.id}, '${clienteEncontrado.nome}', '${clienteEncontrado.email}', '${clienteEncontrado.telefone}')" class="bg-yellow-500 text-white px-4 py-2 mt-2 rounded">Editar</button>
+                    <button onclick="excluirCliente(${clienteEncontrado.id})" class="bg-red-600 text-white px-4 py-2 mt-2 rounded">Excluir</button>
                 </div>
             `;
         } else {
@@ -66,5 +62,67 @@ async function buscarCliente() {
     } catch (error) {
         console.error("Erro ao buscar o cliente:", error);
         document.getElementById("resultadoBusca").innerHTML = "<p class='text-red-600 mt-4'>Erro ao buscar o cliente.</p>";
+    }
+}
+
+function abrirModalEditar(id, nome, email, telefone) {
+    document.getElementById("editId").value = id;
+    document.getElementById("editNome").value = nome;
+    document.getElementById("editEmail").value = email;
+    document.getElementById("editTelefone").value = telefone;
+    
+    document.getElementById("modalEditar").classList.remove("hidden");
+}
+
+function fecharModal() {
+    document.getElementById("modalEditar").classList.add("hidden");
+}
+
+async function salvarEdicao() {
+    let id = document.getElementById("editId").value;
+    let clienteAtualizado = {
+        nome: document.getElementById("editNome").value,
+        email: document.getElementById("editEmail").value,
+        telefone: document.getElementById("editTelefone").value
+    };
+
+    try {
+        let response = await fetch(`${apiURL}/${id}`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(clienteAtualizado)
+        });
+
+        if (response.ok) {
+            alert("Cliente atualizado com sucesso!");
+            fecharModal();
+            buscarCliente(); 
+        } else {
+            alert("Erro ao atualizar o cliente.");
+        }
+    } catch (error) {
+        console.error("Erro ao atualizar o cliente:", error);
+        alert("Erro ao atualizar o cliente.");
+    }
+}
+async function excluirCliente(id) {
+    if (!confirm("Tem certeza que deseja excluir este cliente?")) return;
+
+    try {
+        let response = await fetch(`${apiURL}/${id}`, {
+            method: "DELETE"
+        });
+
+        if (response.ok) {
+            alert("Cliente excluído com sucesso!");
+            document.getElementById("resultadoBusca").innerHTML = ""; 
+        } else {
+            alert("Erro ao excluir o cliente.");
+        }
+    } catch (error) {
+        console.error("Erro ao excluir o cliente:", error);
+        alert("Erro ao excluir o cliente.");
     }
 }
