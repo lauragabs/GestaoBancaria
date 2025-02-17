@@ -149,10 +149,6 @@ async function listarClientes() {
                     <td class="py-2 px-4 border">${cliente.nome}</td>
                     <td class="py-2 px-4 border">${cliente.email}</td>
                     <td class="py-2 px-4 border">${cliente.telefone}</td>
-                    <td class="py-2 px-4 border">
-                        <button onclick="abrirModalEditar(${cliente.id}, '${cliente.nome}', '${cliente.email}', '${cliente.telefone}')" class="bg-yellow-500 text-white px-2 py-1 rounded">Editar</button>
-                        <button onclick="excluirCliente(${cliente.id})" class="bg-red-600 text-white px-2 py-1 rounded ml-2">Excluir</button>
-                    </td>
                 </tr>
             `;
             tabela.innerHTML += linha;
