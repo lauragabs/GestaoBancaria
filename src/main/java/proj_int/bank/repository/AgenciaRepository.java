@@ -19,28 +19,28 @@ public class AgenciaRepository {
     }
 
     public void salvar(Agencia agencia) {
-        String sql = "INSERT INTO agencia (nome, endereco, telefone) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO Agencia (nome_agencia, endereco, telefone) VALUES (?, ?, ?)";
         jdbcTemplate.update(sql, agencia.getNome(), agencia.getEndereco(), agencia.getTelefone());
     }
 
     public List<Agencia> listar() {
-        String sql = "SELECT * FROM agencia";
+        String sql = "SELECT * FROM Agencia";
         return jdbcTemplate.query(sql, new AgenciaRowMapper());
     }
 
     @SuppressWarnings("deprecation")
     public Agencia buscarPorId(int id) {
-        String sql = "SELECT * FROM agencia WHERE id = ?";
+        String sql = "SELECT * FROM Agencia WHERE id = ?";
         return jdbcTemplate.queryForObject(sql, new Object[]{id}, new AgenciaRowMapper());
     }
 
     public void atualizar(Agencia agencia) {
-        String sql = "UPDATE agencia SET nome = ?, endereco = ?, telefone = ? WHERE id = ?";
+        String sql = "UPDATE Agencia SET nome = ?, endereco = ?, telefone = ? WHERE id = ?";
         jdbcTemplate.update(sql, agencia.getNome(), agencia.getEndereco(), agencia.getTelefone(), agencia.getId());
     }
 
     public void excluir(int id) {
-        String sql = "DELETE FROM agencia WHERE id = ?";
+        String sql = "DELETE FROM Agencia WHERE id = ?";
         jdbcTemplate.update(sql, id);
     }
 
@@ -48,10 +48,10 @@ public class AgenciaRepository {
         @Override
         public Agencia mapRow(ResultSet rs, int rowNum) throws SQLException {
             return new Agencia(
-                    rs.getInt("id"),
-                    rs.getString("nome"),
-                    rs.getString("endereco"),
-                    rs.getString("telefone")
+                    rs.getInt("id_agencia"),
+                    rs.getString("nome_agencia"),
+                    rs.getString("endereco_agencia"),
+                    rs.getString("telefone_agencia")
             );
         }
     }
