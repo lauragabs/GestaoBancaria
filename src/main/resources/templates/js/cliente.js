@@ -162,3 +162,41 @@ async function listarClientes() {
 
 // Carregar a lista de clientes quando a página for carregada
 document.addEventListener("DOMContentLoaded", listarClientes);
+async function carregarRelatorios() {
+    try {
+        let response = await fetch(apiRelatorioURL);
+        let dados = await response.json();
+
+        preencherTabela("tabelaDepositos", dados.transacoesDeposito, ["id_cliente", "nome_cliente", "transacoes_deposito"]);
+        preencherTabela("tabelaSaldos", dados.saldoTotal, ["id_cliente", "nome_cliente", "saldo_total"]);
+        preencherTabela("tabelaEmprestimos", dados.emprestimosPendentes, ["id_cliente", "nome_cliente", "total_emprestimo"]);
+
+    } catch (error) {
+        console.error("Erro ao carregar relatórios:", error);
+        ["tabelaDepositos", "tabelaSaldos", "tabelaEmprestimos"].forEach(id => {
+            document.getElementById(id).innerHTML = `<tr><td colspan="3" class="text-center py-4 text-red-600">Erro ao carregar dados.</td></tr>`;
+        });
+    }
+}
+
+function preencherTabela(idTabela, dados, colunas) {
+    let tabela = document.getElementById(idTabela);
+    tabela.innerHTML = "";
+
+    if (dados.length === 0) {
+        tabela.innerHTML = `<tr><td colspan="${colunas.length}" class="text-center py-4">Nenhum dado encontrado.</td></tr>`;
+        return;
+    }
+
+    dados.forEach(item => {
+        let linha = "<tr class='border-b'>";
+        colunas.forEach(coluna => {
+            linha += `<td class="py-2 px-4 border">${item[coluna]}</td>`;
+        });
+        linha += "</tr>";
+        tabela.innerHTML += linha;
+    });
+}
+
+// Carregar os relatórios quando a página for carregada
+document.addEventListener("DOMContentLoaded", carregarRelatorios);

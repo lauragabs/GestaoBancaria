@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relatório de Clientes</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100 flex">
+
+    <aside class="w-80 bg-blue-900 text-white min-h-screen p-5">
+        <h1 class="text-3xl font-bold text-center">Banco</h1>
+        <hr class="my-4 border-white">
+        <nav class="mt-4">
+            <h2 class="text-lg font-semibold">CLIENTE</h2>
+            <ul class="ml-4">
+                <li><a href="cliente_cadastro.html" class="block py-2 hover:underline">Cadastrar</a></li>
+                <li><a href="cliente_busca.html" class="block py-2 hover:underline">Buscar</a></li>
+                <li><a href="cliente_relatorio.html" class="block py-2 hover:underline">Relatórios</a></li>
+            </ul>
+        </nav>
+    </aside>
+
+    <main class="flex-1 p-10">
+        <h1 class="text-2xl font-bold mb-4">Relatório de Clientes</h1>
+
+        <!-- Tabela de Transações de Depósito -->
+        <h2 class="text-xl font-semibold mt-6">Transações de Depósito</h2>
+        <div class="overflow-x-auto bg-white p-4 rounded-lg shadow mt-2">
+            <table class="min-w-full border border-gray-300">
+                <thead>
+                    <tr class="bg-blue-900 text-white">
+                        <th class="py-2 px-4 border">ID Cliente</th>
+                        <th class="py-2 px-4 border">Nome</th>
+                        <th class="py-2 px-4 border">Depósitos</th>
+                    </tr>
+                </thead>
+                <tbody id="tabelaDepositos">
+                    <tr><td colspan="3" class="text-center py-4">Carregando...</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Tabela de Saldos Totais -->
+        <h2 class="text-xl font-semibold mt-6">Saldos Totais</h2>
+        <div class="overflow-x-auto bg-white p-4 rounded-lg shadow mt-2">
+            <table class="min-w-full border border-gray-300">
+                <thead>
+                    <tr class="bg-blue-900 text-white">
+                        <th class="py-2 px-4 border">ID Cliente</th>
+                        <th class="py-2 px-4 border">Nome</th>
+                        <th class="py-2 px-4 border">Saldo Total (R$)</th>
+                    </tr>
+                </thead>
+                <tbody id="tabelaSaldos">
+                    <tr><td colspan="3" class="text-center py-4">Carregando...</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Tabela de Empréstimos Pendentes -->
+        <h2 class="text-xl font-semibold mt-6">Empréstimos Pendentes</h2>
+        <div class="overflow-x-auto bg-white p-4 rounded-lg shadow mt-2">
+            <table class="min-w-full border border-gray-300">
+                <thead>
+                    <tr class="bg-blue-900 text-white">
+                        <th class="py-2 px-4 border">ID Cliente</th>
+                        <th class="py-2 px-4 border">Nome</th>
+                        <th class="py-2 px-4 border">Empréstimo (R$)</th>
+                    </tr>
+                </thead>
+                <tbody id="tabelaEmprestimos">
+                    <tr><td colspan="3" class="text-center py-4">Carregando...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <script src="../js/cliente.js"></script>
+</body>
+
+</html>
