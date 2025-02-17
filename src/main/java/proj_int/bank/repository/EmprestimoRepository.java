@@ -1,55 +1,63 @@
 package proj_int.bank.repository;
 
-import java.util.List;
-
+import proj_int.bank.domain.Emprestimo;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
-import proj_int.bank.domain.Conta;
-import proj_int.bank.domain.Emprestimo;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.List;
 
 @Repository
 public class EmprestimoRepository {
 
-    private JdbcTemplate conexaoBanco;
+    private final JdbcTemplate jdbcTemplate;
 
-    public EmprestimoRepository(JdbcTemplate conexaoBanco) {
-        this.conexaoBanco = conexaoBanco;
+    public EmprestimoRepository(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
     }
 
-    public void inserirEmprestimo(Emprestimo emprestimo) {
-        String sql = "INSERT INTO Emprestimo (idConta, valor, parcelas, juros, garantia, dataVencimento) VALUES (?, ?, ?, ?, ?,?)";
-        conexaoBanco.update(sql, emprestimo.getConta().getId(), 
-                                emprestimo.getValor(), 
-                                emprestimo.getParcelas(), 
-                                emprestimo.getJuros(), 
-                                emprestimo.getGarantia(),
-                                emprestimo.getDataVencimento()
-                            );
+    public void salvar(Emprestimo emprestimo) {
+        String sql = "INSERT INTO Emprestimos (valor_empr, numParcelas_empr, juros_empr, garantia_empr, dataVencimento_empr, id_conta) VALUES (?, ?, ?, ?, ?, ?)";
+        jdbcTemplate.update(sql, emprestimo.getValor(), emprestimo.getNumParcelas(), emprestimo.getJuros(),
+                emprestimo.getGarantia(), emprestimo.getDataVencimento(), emprestimo.getIdConta());
     }
 
-    public void deletarEmprestimoPorId (Integer id) {
-        String sql = "DELETE FROM Emprestimo WHERE id = ?";
-        conexaoBanco.update(sql, id);
+    public List<Emprestimo> listar() {
+        String sql = "SELECT * FROM Emprestimos";
+        return jdbcTemplate.query(sql, new EmprestimoRowMapper());
     }
 
-    public List<Emprestimo> listarEmprestimosPorCpf(String cpf) {
-        String sql = "SELECT e.* FROM Emprestimo e " +
-                     "JOIN Conta co ON e.idConta = co.id " +
-                     "JOIN Cliente cl ON co.idCliente = cl.id " +
-                     "WHERE cl.cpf = ?";
-
-        return conexaoBanco.query(sql, new Object[]{cpf}, (res, rowNum) -> 
-            new Emprestimo (
-                res.getInt("id"),
-                res.getFloat("valor"),
-                res.getInt("parcelas"),
-                res.getFloat("juros"),
-                res.getString("garantia"),
-                res.getDate("dataVencimento").toLocalDate(),
-                new Conta(res.getInt("idConta"))
-            )
-        );
+    @SuppressWarnings("deprecation")
+    public Emprestimo buscarPorId(int id) {
+        String sql = "SELECT * FROM Emprestimos WHERE id_empr = ?";
+        return jdbcTemplate.queryForObject(sql, new Object[]{id}, new EmprestimoRowMapper());
     }
 
+    public void atualizar(Emprestimo emprestimo) {
+        String sql = "UPDATE Emprestimos SET valor_empr = ?, numParcelas_empr = ?, juros_empr = ?, garantia_empr = ?, dataVencimento_empr = ?, id_conta = ? WHERE id_empr = ?";
+        jdbcTemplate.update(sql, emprestimo.getValor(), emprestimo.getNumParcelas(), emprestimo.getJuros(),
+                emprestimo.getGarantia(), emprestimo.getDataVencimento(), emprestimo.getIdConta(), emprestimo.getIdEmprestimo());
+    }
+
+    public void excluir(int id) {
+        String sql = "DELETE FROM Emprestimos WHERE id_empr = ?";
+        jdbcTemplate.update(sql, id);
+    }
+
+    private static class EmprestimoRowMapper implements RowMapper<Emprestimo> {
+        @Override
+        public Emprestimo mapRow(ResultSet rs, int rowNum) throws SQLException {
+            return new Emprestimo(
+                    rs.getInt("id_empr"),
+                    rs.getDouble("valor_empr"),
+                    rs.getInt("numParcelas_empr"),
+                    rs.getFloat("juros_empr"),
+                    rs.getString("garantia_empr"),
+                    rs.getDate("dataVencimento_empr"),
+                    rs.getInt("id_conta")
+            );
+        }
+    }
 }

@@ -1,67 +1,68 @@
 package proj_int.bank.repository;
 
+import proj_int.bank.domain.Funcionario;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
-import proj_int.bank.domain.Funcionario;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.List;
 
 @Repository
 public class FuncionarioRepository {
 
-    private JdbcTemplate conexaoBanco;
+    private final JdbcTemplate jdbcTemplate;
 
-    public FuncionarioRepository(JdbcTemplate conexaoBanco) {
-        this.conexaoBanco = conexaoBanco;
+    public FuncionarioRepository(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
     }
 
-    public void inserirFuncionario(Funcionario funcionario) {
-        String sql = "INSERT INTO funcionario (nome, cargo, telefone, cpf, endereco, data_nascimento, salario, email, data_admissao) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        conexaoBanco.update(sql, 
-            funcionario.getNome(),
-            funcionario.getCargo(),
-            funcionario.getTelefone(),
-            funcionario.getCpf(),
-            funcionario.getEndereco(),
-            funcionario.getDataNascimento(),
-            funcionario.getSalario(),
-            funcionario.getEmail(),
-            funcionario.getDataAdmissao()
-        );
+    public void salvar(Funcionario funcionario) {
+        String sql = "INSERT INTO Funcionario (nome_func, cargo_func, telefone_func, cpf_func, endereco_func, dataNasc_func, salario_func, sexo_func, id_agencia) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        jdbcTemplate.update(sql, funcionario.getNomeFunc(), funcionario.getCargoFunc(), funcionario.getTelefoneFunc(),
+                funcionario.getCpfFunc(), funcionario.getEnderecoFunc(), funcionario.getDataNascFunc(),
+                funcionario.getSalarioFunc(), funcionario.getSexoFunc(), funcionario.getIdAgencia());
     }
 
-    public void deletarFuncionarioPorId (Integer id) {
-        String sql = "DELETE FROM funcionario WHERE id = ?";
-        conexaoBanco.update(sql, id);
+    public List<Funcionario> listar() {
+        String sql = "SELECT * FROM Funcionario";
+        return jdbcTemplate.query(sql, new FuncionarioRowMapper());
     }
 
-    public void atualizarFuncionario(Funcionario funcionario) {
-        String sql = "UPDATE funcionario SET cargo = ?, telefone = ?, endereco = ?, salario = ?, email = ? WHERE id = ?";
-        conexaoBanco.update(sql, 
-            funcionario.getCargo(),
-            funcionario.getTelefone(),
-            funcionario.getEndereco(),
-            funcionario.getSalario(),
-            funcionario.getEmail(),
-            funcionario.getId()
-        );
+    @SuppressWarnings("deprecation")
+    public Funcionario buscarPorId(int id) {
+        String sql = "SELECT * FROM Funcionario WHERE id_func = ?";
+        return jdbcTemplate.queryForObject(sql, new Object[]{id}, new FuncionarioRowMapper());
     }
 
-    public Funcionario buscarFuncionarioPorCpf(String cpf) {
-        String sql = "SELECT * FROM funcionario WHERE cpf = ?";
-        return conexaoBanco.queryForObject(sql, new Object[]{cpf}, (res, rowNum) -> 
-            new Funcionario (
-                res.getInt("id"),
-                res.getString("nome"),
-                res.getString("cargo"),
-                res.getString("telefone"),
-                res.getString("cpf"),
-                res.getString("endereco"),
-                res.getDate("data_nascimento").toLocalDate(),
-                res.getFloat("salario"),
-                res.getString("email"),
-                res.getDate("data_admissao").toLocalDate()
-            )
-        );
+    public void atualizar(Funcionario funcionario) {
+        String sql = "UPDATE Funcionario SET nome_func = ?, cargo_func = ?, telefone_func = ?, cpf_func = ?, endereco_func = ?, dataNasc_func = ?, salario_func = ?, sexo_func = ?, id_agencia = ? WHERE id_func = ?";
+        jdbcTemplate.update(sql, funcionario.getNomeFunc(), funcionario.getCargoFunc(), funcionario.getTelefoneFunc(),
+                funcionario.getCpfFunc(), funcionario.getEnderecoFunc(), funcionario.getDataNascFunc(),
+                funcionario.getSalarioFunc(), funcionario.getSexoFunc(), funcionario.getIdAgencia(), funcionario.getIdFunc());
     }
 
+    public void excluir(int id) {
+        String sql = "DELETE FROM Funcionario WHERE id_func = ?";
+        jdbcTemplate.update(sql, id);
+    }
+
+    private static class FuncionarioRowMapper implements RowMapper<Funcionario> {
+        @Override
+        public Funcionario mapRow(ResultSet rs, int rowNum) throws SQLException {
+            return new Funcionario(
+                    rs.getInt("id_func"),
+                    rs.getString("nome_func"),
+                    rs.getString("cargo_func"),
+                    rs.getString("telefone_func"),
+                    rs.getString("cpf_func"),
+                    rs.getString("endereco_func"),
+                    rs.getDate("dataNasc_func"),
+                    rs.getDouble("salario_func"),
+                    rs.getString("sexo_func"),
+                    rs.getInt("id_agencia")
+            );
+        }
+    }
 }
