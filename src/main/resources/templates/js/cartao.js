@@ -1,4 +1,4 @@
-const apiURL = "http://10.10.22.14:8080/clientes";
+const apiURL = "http://10.10.22.14:8080/cartoes";
 
 document.getElementById("formCliente")?.addEventListener("submit", async function(event) {
     event.preventDefault();
