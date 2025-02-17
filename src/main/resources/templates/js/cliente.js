@@ -1,4 +1,4 @@
-window.addEventListener("DOMContentLoaded", function() {
+
 const apiURL = "http://10.10.22.14:8080/clientes";
 
 document.getElementById("formCliente")?.addEventListener("submit", async function(event) {
@@ -163,4 +163,6 @@ async function listarClientes() {
         document.getElementById("tabelaClientes").innerHTML = `<tr><td colspan="5" class="text-center py-4 text-red-600">Erro ao carregar clientes.</td></tr>`;
     }
 }
-});
+
+// Carregar a lista de clientes quando a página for carregada
+document.addEventListener("DOMContentLoaded", listarClientes);
