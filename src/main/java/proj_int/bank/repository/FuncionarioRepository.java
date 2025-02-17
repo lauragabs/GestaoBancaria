@@ -19,32 +19,32 @@ public class FuncionarioRepository {
     }
 
     public void salvar(Funcionario funcionario) {
-        String sql = "INSERT INTO funcionario (nome_func, cargo_func, telefone_func, cpf_func, endereco_func, data_nasc_func, salario_func, sexo_func, id_agencia) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Funcionario (nome_func, cargo_func, telefone_func, cpf_func, endereco_func, dataNasc_func, salario_func, sexo_func, id_agencia) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         jdbcTemplate.update(sql, funcionario.getNomeFunc(), funcionario.getCargoFunc(), funcionario.getTelefoneFunc(),
                 funcionario.getCpfFunc(), funcionario.getEnderecoFunc(), funcionario.getDataNascFunc(),
                 funcionario.getSalarioFunc(), funcionario.getSexoFunc(), funcionario.getIdAgencia());
     }
 
     public List<Funcionario> listar() {
-        String sql = "SELECT * FROM funcionario";
+        String sql = "SELECT * FROM Funcionario";
         return jdbcTemplate.query(sql, new FuncionarioRowMapper());
     }
 
     @SuppressWarnings("deprecation")
     public Funcionario buscarPorId(int id) {
-        String sql = "SELECT * FROM funcionario WHERE id_func = ?";
+        String sql = "SELECT * FROM Funcionario WHERE id_func = ?";
         return jdbcTemplate.queryForObject(sql, new Object[]{id}, new FuncionarioRowMapper());
     }
 
     public void atualizar(Funcionario funcionario) {
-        String sql = "UPDATE funcionario SET nome_func = ?, cargo_func = ?, telefone_func = ?, cpf_func = ?, endereco_func = ?, data_nasc_func = ?, salario_func = ?, sexo_func = ?, id_agencia = ? WHERE id_func = ?";
+        String sql = "UPDATE Funcionario SET nome_func = ?, cargo_func = ?, telefone_func = ?, cpf_func = ?, endereco_func = ?, dataNasc_func = ?, salario_func = ?, sexo_func = ?, id_agencia = ? WHERE id_func = ?";
         jdbcTemplate.update(sql, funcionario.getNomeFunc(), funcionario.getCargoFunc(), funcionario.getTelefoneFunc(),
                 funcionario.getCpfFunc(), funcionario.getEnderecoFunc(), funcionario.getDataNascFunc(),
                 funcionario.getSalarioFunc(), funcionario.getSexoFunc(), funcionario.getIdAgencia(), funcionario.getIdFunc());
     }
 
     public void excluir(int id) {
-        String sql = "DELETE FROM funcionario WHERE id_func = ?";
+        String sql = "DELETE FROM Funcionario WHERE id_func = ?";
         jdbcTemplate.update(sql, id);
     }
 
@@ -58,7 +58,7 @@ public class FuncionarioRepository {
                     rs.getString("telefone_func"),
                     rs.getString("cpf_func"),
                     rs.getString("endereco_func"),
-                    rs.getDate("data_nasc_func"),
+                    rs.getDate("dataNasc_func"),
                     rs.getDouble("salario_func"),
                     rs.getString("sexo_func"),
                     rs.getInt("id_agencia")

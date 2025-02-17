@@ -21,44 +21,44 @@ public class ContaRepository {
     }
 
     public void salvar(Conta conta) {
-        String sql = "INSERT INTO conta (saldo, tipo, data_abertura, id_cliente, id_agencia) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Conta (saldo_conta, tipo_conta, dataAbertura_conta, id_cliente, id_agencia) VALUES (?, ?, ?, ?, ?)";
         jdbcTemplate.update(sql, conta.getSaldo(), conta.getTipo(), conta.getDataAbertura(),
                 conta.getCliente().getId(), conta.getAgencia().getId());
     }
 
     public List<Conta> listar() {
-        String sql = "SELECT * FROM conta";
+        String sql = "SELECT * FROM Conta";
         return jdbcTemplate.query(sql, new ContaRowMapper());
     }
 
     @SuppressWarnings("deprecation")
     public Conta buscarPorId(int id) {
-        String sql = "SELECT * FROM conta WHERE id = ?";
+        String sql = "SELECT * FROM Conta WHERE id_conta = ?";
         return jdbcTemplate.queryForObject(sql, new Object[]{id}, new ContaRowMapper());
     }
 
     public void atualizar(Conta conta) {
-        String sql = "UPDATE conta SET saldo = ?, tipo = ?, data_abertura = ?, id_cliente = ?, id_agencia = ? WHERE id = ?";
+        String sql = "UPDATE Conta SET saldo_conta = ?, tipo_conta = ?, dataAbertura_conta = ?, id_cliente = ?, id_agencia = ? WHERE id_conta = ?";
         jdbcTemplate.update(sql, conta.getSaldo(), conta.getTipo(), conta.getDataAbertura(),
                 conta.getCliente().getId(), conta.getAgencia().getId(), conta.getId());
     }
 
     public void excluir(int id) {
-        String sql = "DELETE FROM conta WHERE id = ?";
+        String sql = "DELETE FROM Conta WHERE id_conta = ?";
         jdbcTemplate.update(sql, id);
     }
 
     private static class ContaRowMapper implements RowMapper<Conta> {
         @Override
         public Conta mapRow(ResultSet rs, int rowNum) throws SQLException {
-            Cliente cliente = new Cliente(rs.getInt("id_cliente"), "", "", "", "", "", "", rs.getDate("data_nascimento"), "", "");
+            Cliente cliente = new Cliente(rs.getInt("id_cliente"), "", "", "", "", "", "", rs.getDate("dataNascimento_conta"), "", "");
             Agencia agencia = new Agencia(rs.getInt("id_agencia"), "", "", "");
 
             return new Conta(
-                    rs.getInt("id"),
-                    rs.getDouble("saldo"),
-                    rs.getString("tipo"),
-                    rs.getDate("data_abertura"),
+                    rs.getInt("id_conta"),
+                    rs.getDouble("saldo_conta"),
+                    rs.getString("tipo_conta"),
+                    rs.getDate("dataAbertura_conta"),
                     cliente,
                     agencia
             );

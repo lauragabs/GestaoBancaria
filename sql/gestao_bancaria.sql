@@ -1,6 +1,6 @@
 CREATE TABLE
     Cliente (
-        id_cliente INT PRIMARY KEY,
+        id_cliente INT AUTO_INCREMENT PRIMARY KEY,
         nome_cliente VARCHAR(100),
         sexo_cliente VARCHAR(4),
         cpf_cliente VARCHAR(11),
@@ -14,7 +14,7 @@ CREATE TABLE
 
 CREATE TABLE
     Agencia (
-        id_agencia INT PRIMARY KEY,
+        id_agencia INT AUTO_INCREMENT PRIMARY KEY,
         nome_agencia VARCHAR(50),
         endereco_agencia VARCHAR(100),
         telefone_agencia VARCHAR(15)
@@ -22,7 +22,7 @@ CREATE TABLE
 
 CREATE TABLE
     Conta (
-        id_conta INT PRIMARY KEY,
+        id_conta INT AUTO_INCREMENT PRIMARY KEY,
         saldo_conta NUMERIC(7, 2),
         tipo_conta VARCHAR(10),
         dataAbertura_conta DATETIME,
@@ -34,7 +34,7 @@ CREATE TABLE
 
 CREATE TABLE
     Transacao (
-        id_transacao INT PRIMARY KEY,
+        id_transacao INT AUTO_INCREMENT PRIMARY KEY,
         tipo_transacao VARCHAR(20),
         valor_transacao NUMERIC(7, 2),
         data_transacao DATE,
@@ -44,7 +44,7 @@ CREATE TABLE
 
 CREATE TABLE
     Transferencia (
-        id_transferencia INT PRIMARY KEY,
+        id_transferencia INT AUTO_INCREMENT PRIMARY KEY,
         contaDestino_transferencia INT,
         id_transacao INT,
         FOREIGN KEY (id_transacao) REFERENCES Transacao (id_transacao)
@@ -52,7 +52,7 @@ CREATE TABLE
 
 CREATE TABLE
     Funcionario (
-        id_func INT PRIMARY KEY,
+        id_func INT AUTO_INCREMENT PRIMARY KEY,
         nome_func VARCHAR(100),
         cargo_func VARCHAR(50),
         telefone_func VARCHAR(15),
@@ -67,7 +67,7 @@ CREATE TABLE
 
 CREATE TABLE
     Gerente (
-        id_gerente INT PRIMARY KEY,
+        id_gerente INT AUTO_INCREMENT PRIMARY KEY,
         nivel_gerente VARCHAR(10),
         id_func INT,
         FOREIGN KEY (id_func) REFERENCES Funcionario (id_func)
@@ -75,7 +75,7 @@ CREATE TABLE
 
 CREATE TABLE
     Cartao (
-        id_cartao INT PRIMARY KEY,
+        id_cartao INT AUTO_INCREMENT PRIMARY KEY,
         tipo_cartao VARCHAR(20),
         limite_cartao NUMERIC(7, 2),
         dataValidade_cartao DATE,
@@ -86,7 +86,7 @@ CREATE TABLE
 
 CREATE TABLE
     Fatura (
-        id_fatura INT PRIMARY KEY,
+        id_fatura INT AUTO_INCREMENT PRIMARY KEY,
         dataVencimento_fatura DATE,
         valor_fatura NUMERIC(7, 2),
         id_cartao INT,
@@ -95,7 +95,7 @@ CREATE TABLE
 
 CREATE TABLE
     Emprestimos (
-        id_empr INT PRIMARY KEY,
+        id_empr INT AUTO_INCREMENT PRIMARY KEY,
         valor_empr NUMERIC(7, 2),
         numParcelas_empr INT,
         juros_empr FLOAT,
@@ -107,7 +107,7 @@ CREATE TABLE
 
 CREATE TABLE
     Pagamento (
-        id_pag INT PRIMARY KEY,
+        id_pag INT AUTO_INCREMENT PRIMARY KEY,
         data_pag DATE,
         valor_pag NUMERIC(7, 2),
         descricao_pag VARCHAR(50),

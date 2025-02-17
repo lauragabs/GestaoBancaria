@@ -19,7 +19,7 @@ public class AgenciaRepository {
     }
 
     public void salvar(Agencia agencia) {
-        String sql = "INSERT INTO Agencia (nome_agencia, endereco, telefone) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO Agencia (nome_agencia, endereco_agencia, telefone_agencia) VALUES (?, ?, ?)";
         jdbcTemplate.update(sql, agencia.getNome(), agencia.getEndereco(), agencia.getTelefone());
     }
 
@@ -30,17 +30,17 @@ public class AgenciaRepository {
 
     @SuppressWarnings("deprecation")
     public Agencia buscarPorId(int id) {
-        String sql = "SELECT * FROM Agencia WHERE id = ?";
+        String sql = "SELECT * FROM Agencia WHERE id_agencia = ?";
         return jdbcTemplate.queryForObject(sql, new Object[]{id}, new AgenciaRowMapper());
     }
 
     public void atualizar(Agencia agencia) {
-        String sql = "UPDATE Agencia SET nome = ?, endereco = ?, telefone = ? WHERE id = ?";
+        String sql = "UPDATE Agencia SET nome_agencia = ?, endereco_agencia = ?, telefone_agencia = ? WHERE id_agencia = ?";
         jdbcTemplate.update(sql, agencia.getNome(), agencia.getEndereco(), agencia.getTelefone(), agencia.getId());
     }
 
     public void excluir(int id) {
-        String sql = "DELETE FROM Agencia WHERE id = ?";
+        String sql = "DELETE FROM Agencia WHERE id_agencia = ?";
         jdbcTemplate.update(sql, id);
     }
 
