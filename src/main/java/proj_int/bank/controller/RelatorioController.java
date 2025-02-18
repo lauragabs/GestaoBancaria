@@ -20,12 +20,11 @@ public class RelatorioController {
 
     @GetMapping("/relatorio")
     public Map<String, List<Map<String, Object>>> getRelatorio() {
-        // Executa as três queries
+
         List<Map<String, Object>> saldoTotal = clienteRepository.findSaldoTotalPorCliente();
         List<Map<String, Object>> transacoesDeposito = clienteRepository.findTransacoesDepositoPorCliente();
         List<Map<String, Object>> emprestimosPendentes = clienteRepository.findEmprestimosPendentesPorCliente();
 
-        // Retorna um mapa com os resultados de cada consulta
         return Map.of(
                 "saldoTotal", saldoTotal,
                 "transacoesDeposito", transacoesDeposito,

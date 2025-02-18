@@ -25,7 +25,8 @@ async function getData() {
     const prompt = `Você é especialista em Analise de dados financeiros. Sua tarefa é me trazer insights sobre os dados abaixo de forma clara e eficiente.${ JSON.stringify(data)}`;
 
     const result = await model.generateContent(prompt);
-    console.log(result.response.text());
+    console.log(result)
+    return result.response.text()
   } catch (error) {
     console.error('Erro:', error);
   }

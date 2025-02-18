@@ -38,3 +38,6 @@ build/
 # Outros
 HELP.md
 .env
+
+/node_modules
+package-lock.json
