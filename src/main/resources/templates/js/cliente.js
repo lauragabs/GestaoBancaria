@@ -16,7 +16,16 @@ document.getElementById("formCliente")?.addEventListener("submit", async functio
         senha: document.getElementById("senha").value
     };
 
+    
+   
     try {
+        const cpfValido = await validateCpf(novoCliente.cpf)
+        if (!cpfValido) {
+            alert("CPF inválido");
+            return;
+        }
+        
+
         let response = await fetch(apiURL, {
             method: "POST",
             headers: {
@@ -36,6 +45,46 @@ document.getElementById("formCliente")?.addEventListener("submit", async functio
         alert("Erro ao cadastrar o cliente.");
     }
 });
+
+const CPF_LENGHT = 11
+const FACTORY_FIRST_DIGIT = 10
+const FACTORY_SECOND_DIGIT = 11
+
+async function validateCpf(cpf) {
+    if (!cpf) return false
+    console.log(1)
+    cpf = removeSpecialCharacters(cpf)
+    if (cpf.length !== CPF_LENGHT) return false
+    console.log(1)
+    if (allDigitsAreTheSame(cpf)) return false;
+    console.log(1)
+    const digit1 = calculateDigit(cpf, FACTORY_FIRST_DIGIT)
+    const digit2 = calculateDigit(cpf, FACTORY_SECOND_DIGIT)
+    console.log(cpf)
+    return extractLastDigit(cpf) === `${digit1}${digit2}`;
+}
+
+function removeSpecialCharacters(cpf) {
+    return cpf.replace(/\D/g,"");
+}
+
+function allDigitsAreTheSame(cpf) {
+    const [firstDigit] = cpf
+    return [...cpf].every(digit => digit === firstDigit)
+}
+
+function calculateDigit(cpf, factor) {
+    let total = 0;
+    for (const digit of cpf) {
+        if (factor > 1) total += parseInt(digit) * factor--
+    }
+    const remainder = total % 11;
+    return (remainder < 2) ? 0 : 11 - remainder
+}
+
+function extractLastDigit(cpf){
+    return cpf.slice(9)
+}
 
 async function buscarCliente() {
     let idBusca = document.getElementById("buscarCPF").value;
