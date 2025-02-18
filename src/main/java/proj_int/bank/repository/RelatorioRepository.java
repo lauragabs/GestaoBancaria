@@ -13,7 +13,6 @@ public class RelatorioRepository {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    // Resumo de saldo total por cliente
     public List<Map<String, Object>> findSaldoTotalPorCliente() {
         String query = "SELECT c.id_cliente, c.nome_cliente, SUM(co.saldo_conta) AS saldo_total " +
                        "FROM Cliente c " +
@@ -22,7 +21,6 @@ public class RelatorioRepository {
         return jdbcTemplate.queryForList(query);
     }
 
-    // Transações de depósito realizadas por cliente
     public List<Map<String, Object>> findTransacoesDepositoPorCliente() {
         String query = "SELECT c.id_cliente, c.nome_cliente, COUNT(t.id_transacao) AS transacoes_deposito " +
                        "FROM Cliente c " +
@@ -34,7 +32,6 @@ public class RelatorioRepository {
         return jdbcTemplate.queryForList(query);
     }
 
-    // Empréstimos e valores devidos por cliente com parcelas pendentes
     public List<Map<String, Object>> findEmprestimosPendentesPorCliente() {
         String query = "SELECT cl.id_cliente, cl.nome_cliente, SUM(e.valor_empr) AS total_emprestimo " +
                        "FROM Cliente cl " +
