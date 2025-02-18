@@ -251,3 +251,4 @@ function preencherTabela(idTabela, dados, colunas) {
 
 // Carregar os relatórios quando a página for carregada
 document.addEventListener("DOMContentLoaded", carregarRelatorios);
+
