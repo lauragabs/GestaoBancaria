@@ -1,3 +1,5 @@
+const apiUrl = 'http://localhost:8080/api/relatorio';
+
 async function getData() {
   try {
     const response = await fetch(apiUrl, {
